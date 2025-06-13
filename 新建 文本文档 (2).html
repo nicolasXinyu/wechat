@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>毕业祝福弹出</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fffafc;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      position: fixed;
+      bottom: 5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    input {
+      padding: 1vh 2vw;
+      font-size: 4vw;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 2vh;
+      width: 60vw;
+    }
+
+    button {
+      padding: 2vh 5vw;
+      font-size: 4vw;
+      border-radius: 12px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .blessing {
+      position: absolute;
+      font-size: 5vw;
+      font-weight: bold;
+      white-space: nowrap;
+      opacity: 0;
+      transform: scale(0.5);
+      animation: popOut 2.5s ease forwards;
+    }
+
+    @keyframes popOut {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      30% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+      60% {
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <input type="text" id="username" placeholder="请输入你的名字" />
+    <br>
+    <button onclick="showBlessing()">点我祝福</button>
+  </div>
+
+  <script>
+    const blessings = [
+      "XXX，毕业快乐！",
+      "XXX，前程似锦，未来可期！",
+      "XXX，愿你以梦为马，不负韶华！",
+      "XXX，毕业不是终点，而是新的起点！",
+      "XXX，愿你在人生的新旅程中一帆风顺！",
+      "XXX，不负青春，前路光明灿烂！",
+      "XXX，愿你乘风破浪，迎接辉煌明天！",
+      "XXX，青春不散场，未来更精彩！"
+    ];
+
+    function getRandomColor() {
+      const r = Math.floor(150 + Math.random() * 100);
+      const g = Math.floor(150 + Math.random() * 100);
+      const b = Math.floor(150 + Math.random() * 100);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function showBlessing() {
+      const name = document.getElementById('username').value.trim();
+      if (!name) {
+        alert('请输入你的名字哦！');
+        return;
+      }
+
+      const textTemplate = blessings[Math.floor(Math.random() * blessings.length)];
+      const text = textTemplate.replace(/XXX/g, name);
+
+      const blessing = document.createElement('div');
+      blessing.className = 'blessing';
+      blessing.innerText = text;
+      blessing.style.color = getRandomColor();
+      blessing.style.visibility = 'hidden'; // 👈 先隐藏用于测量大小
+      document.body.appendChild(blessing);
+
+      // 获取元素尺寸 + 屏幕边界
+      const maxW = window.innerWidth;
+      const maxH = window.innerHeight;
+      const boxW = blessing.offsetWidth;
+      const boxH = blessing.offsetHeight;
+
+      const xMax = maxW - boxW;
+      const yMax = maxH - boxH;
+
+      // 安全随机位置
+      const x = Math.random() * xMax;
+      const y = Math.random() * yMax;
+
+      blessing.style.left = `${x}px`;
+      blessing.style.top = `${y}px`;
+      blessing.style.visibility = 'visible'; // 👈 显示元素
+
+      // 动画完移除
+      setTimeout(() => {
+        blessing.remove();
+      }, 2500);
+    }
+  </script>
+
+</body>
+</html>
